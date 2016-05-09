@@ -37,4 +37,9 @@ defmodule Couchdb.Database do
     database.server
     |> Server.post("/#{database.name}/_bulk_docs", body)
   end
+
+  def delete(database, id, rev) do
+    database.server
+    |> Server.delete("/#{database.name}/#{id}", %{rev: rev})
+  end
 end
