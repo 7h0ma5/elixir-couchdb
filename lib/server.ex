@@ -1,10 +1,10 @@
-defmodule Couchdb.Server do
+defmodule CouchDB.Server do
   defstruct [:host, :port, :protocol]
 
   @headers [{"content-type", "application/json; charset=utf-8"}]
 
   def database(server, name) do
-    %Couchdb.Database{server: server, name: name}
+    %CouchDB.Database{server: server, name: name}
   end
 
   def url(server, path, options \\ []) do

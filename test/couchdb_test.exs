@@ -1,6 +1,6 @@
-defmodule CouchdbTest do
+defmodule CouchDBTest do
   use ExUnit.Case
-  doctest Couchdb
+  doctest CouchDB
 
   test "the truth" do
     assert 1 + 1 == 2

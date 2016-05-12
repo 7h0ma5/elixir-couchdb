@@ -1,4 +1,4 @@
-defmodule Couchdb.Mixfile do
+defmodule CouchDB.Mixfile do
   use Mix.Project
 
   def project do

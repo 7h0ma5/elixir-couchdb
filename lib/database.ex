@@ -1,7 +1,7 @@
-defmodule Couchdb.Database do
+defmodule CouchDB.Database do
   defstruct [:name, :server]
 
-  alias Couchdb.Server
+  alias CouchDB.Server
 
   def create(database) do
     database.server
