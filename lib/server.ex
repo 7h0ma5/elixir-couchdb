@@ -1,5 +1,5 @@
 defmodule CouchDB.Server do
-  defstruct [:host, :port, :protocol]
+  defstruct [:host, :port, :protocol, :user, :password]
 
   @headers [{"content-type", "application/json; charset=utf-8"}]
 
@@ -19,26 +19,39 @@ defmodule CouchDB.Server do
 
   def get(server, path, options \\ []) do
     url(server, path, options)
-    |> HTTPoison.get!
+    |> HTTPoison.get!(headers(server))
     |> handle_get
   end
 
   def post(server, path, body) do
     url(server, path, [])
-    |> HTTPoison.post!(body, @headers)
+    |> HTTPoison.post!(body, headers(server))
     |> handle_post
   end
 
   def put(server, path, body) do
     url(server, path, [])
-    |> HTTPoison.put!(body, @headers)
+    |> HTTPoison.put!(body, headers(server))
     |> handle_put
   end
 
   def delete(server, path, options \\ []) do
     url(server, path, options)
-    |> HTTPoison.delete!
+    |> HTTPoison.delete!(headers(server))
     |> handle_delete
+  end
+
+  defp headers(server) do
+    if server.user && server.password do
+      @headers ++ [auth_header(server.user, server.password)]
+    else
+      @headers
+    end
+  end
+
+  defp auth_header(user, password) do
+    encoded = Base.encode64("#{user}:#{password}")
+    {"Authorization", "Basic #{encoded}"}
   end
 
   defp handle_get(%{status_code: 200, body: body}), do: { :ok, body }
