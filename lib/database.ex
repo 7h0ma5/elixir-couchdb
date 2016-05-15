@@ -33,6 +33,11 @@ defmodule CouchDB.Database do
     |> Server.post("/#{database.name}", body)
   end
 
+  def insert(database, id, body) do
+    database.server
+    |> Server.put("/#{database.name}/#{id}", body)
+  end
+
   def bulk(database, body) do
     database.server
     |> Server.post("/#{database.name}/_bulk_docs", body)
