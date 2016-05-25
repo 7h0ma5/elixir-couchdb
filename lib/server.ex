@@ -8,12 +8,13 @@ defmodule CouchDB.Server do
   end
 
   def url(server, path, options \\ []) do
+    query = if options == [], do: nil, else: URI.encode_query(options)
     URI.to_string(%URI{
       host: server.host,
       port: server.port,
       scheme: server.protocol,
       path: path,
-      query: URI.encode_query(options)
+      query: query
     })
   end
 
