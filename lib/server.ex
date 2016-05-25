@@ -41,6 +41,19 @@ defmodule CouchDB.Server do
     |> handle_delete
   end
 
+  def replicate(server,  from, to, options \\ []) do
+    body = Enum.into(options, %{})
+    |> Map.merge(%{
+      source: from,
+      target: to
+    })
+    |> Poison.encode!
+
+    url(server, "/_replicate", [])
+    |> HTTPoison.post!(body, headers(server))
+    |> handle_post
+  end
+
   defp headers(server) do
     if server.user && server.password do
       @headers ++ [auth_header(server.user, server.password)]
@@ -57,7 +70,9 @@ defmodule CouchDB.Server do
   defp handle_get(%{status_code: 200, body: body}), do: { :ok, body }
   defp handle_get(%{status_code: ___, body: body}), do: { :error, body }
 
+  defp handle_post(%{status_code: 200, body: body}), do: { :ok, body }
   defp handle_post(%{status_code: 201, body: body}), do: { :ok, body }
+  defp handle_post(%{status_code: 202, body: body}), do: { :ok, body }
   defp handle_post(%{status_code: ___, body: body}), do: { :error, body }
 
   defp handle_put(%{status_code: 201, body: body}), do: { :ok, body }
