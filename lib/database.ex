@@ -28,6 +28,16 @@ defmodule CouchDB.Database do
     |> Server.get("/#{database.name}/_design/#{design}/_view/#{view}", options)
   end
 
+  def show(database, design, show, id, options \\ %{}) do
+    database.server
+    |> Server.get("/#{database.name}/_design/#{design}/_show/#{show}/#{id}", options)
+  end
+
+  def list(database, design, list, view, options \\ %{}) do
+    database.server
+    |> Server.get("/#{database.name}/_design/#{design}/_list/#{list}/#{view}", options)
+  end
+
   def insert(database, body) do
     database.server
     |> Server.post("/#{database.name}", body)
