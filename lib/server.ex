@@ -20,25 +20,25 @@ defmodule CouchDB.Server do
 
   def get(server, path, options \\ []) do
     url(server, path, options)
-    |> HTTPoison.get!(headers(server))
+    |> HTTPoison.get(headers(server))
     |> handle_get
   end
 
   def post(server, path, body) do
     url(server, path, [])
-    |> HTTPoison.post!(body, headers(server))
+    |> HTTPoison.post(body, headers(server))
     |> handle_post
   end
 
   def put(server, path, body) do
     url(server, path, [])
-    |> HTTPoison.put!(body, headers(server))
+    |> HTTPoison.put(body, headers(server))
     |> handle_put
   end
 
   def delete(server, path, options \\ []) do
     url(server, path, options)
-    |> HTTPoison.delete!(headers(server))
+    |> HTTPoison.delete(headers(server))
     |> handle_delete
   end
 
@@ -51,7 +51,7 @@ defmodule CouchDB.Server do
     |> Poison.encode!
 
     url(server, "/_replicate", [])
-    |> HTTPoison.post!(body, headers(server))
+    |> HTTPoison.post(body, headers(server))
     |> handle_post
   end
 
@@ -68,17 +68,22 @@ defmodule CouchDB.Server do
     {"Authorization", "Basic #{encoded}"}
   end
 
-  defp handle_get(%{status_code: 200, body: body}), do: { :ok, body }
-  defp handle_get(%{status_code: ___, body: body}), do: { :error, body }
+  defp handle_get({:ok, %{status_code: 200, body: body}}), do: { :ok, body }
+  defp handle_get({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_get({:error, reason}), do: { :error, reason }
 
-  defp handle_post(%{status_code: 200, body: body}), do: { :ok, body }
-  defp handle_post(%{status_code: 201, body: body}), do: { :ok, body }
-  defp handle_post(%{status_code: 202, body: body}), do: { :ok, body }
-  defp handle_post(%{status_code: ___, body: body}), do: { :error, body }
 
-  defp handle_put(%{status_code: 201, body: body}), do: { :ok, body }
-  defp handle_put(%{status_code: ___, body: body}), do: { :error, body }
+  defp handle_post({:ok, %{status_code: 200, body: body}}), do: { :ok, body }
+  defp handle_post({:ok, %{status_code: 201, body: body}}), do: { :ok, body }
+  defp handle_post({:ok, %{status_code: 202, body: body}}), do: { :ok, body }
+  defp handle_post({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_post({:error, reason}), do: { :error, reason }
 
-  defp handle_delete(%{status_code: 200, body: body}), do: { :ok, body }
-  defp handle_delete(%{status_code: ___, body: body}), do: { :error, body }
+  defp handle_put({:ok, %{status_code: 201, body: body}}), do: { :ok, body }
+  defp handle_put({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_put({:error, reason}), do: { :error, reason }
+
+  defp handle_delete({:ok, %{status_code: 200, body: body}}), do: { :ok, body }
+  defp handle_delete({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_delete({:error, reason}), do: { :error, reason }
 end
