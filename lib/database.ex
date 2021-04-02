@@ -57,4 +57,19 @@ defmodule CouchDB.Database do
     database.server
     |> Server.delete("/#{database.name}/#{id}", %{rev: rev})
   end
+  
+  def get_attachment(database, id, attname) do
+    database.server
+    |> Server.get("/#{database.name}/#{id}/#{attname}")
+  end
+  
+  def insert_attachment(database, id, attname, body) do
+    database.server
+    |> Server.put("/#{database.name}/#{id}/#{attname}", body)
+  end
+  
+  def delete_attachment(database, id, attname, rev) do
+    database.server
+    |> Server.delete("/#{database.name}/#{id}/#{attname}", %{rev: rev})
+  end
 end
