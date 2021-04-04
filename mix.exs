@@ -14,7 +14,7 @@ defmodule CouchDB.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:httpoison, :logger]]
+    [applications: [:httpoison, :poison, :logger]]
   end
 
   # Dependencies can be Hex packages:
@@ -28,8 +28,8 @@ defmodule CouchDB.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 1.0"},
-      {:poison, "~> 3.1.0"}
+      {:httpoison, "~> 1.8"},
+      {:poison, "~> 4.0"}
     ]
   end
 end

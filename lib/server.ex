@@ -69,21 +69,21 @@ defmodule CouchDB.Server do
   end
 
   defp handle_get({:ok, %{status_code: 200, body: body}}), do: { :ok, body }
-  defp handle_get({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_get({:ok, %{status_code: _, body: body}}), do: { :error, body }
   defp handle_get({:error, reason}), do: { :error, reason }
 
 
   defp handle_post({:ok, %{status_code: 200, body: body}}), do: { :ok, body }
   defp handle_post({:ok, %{status_code: 201, body: body}}), do: { :ok, body }
   defp handle_post({:ok, %{status_code: 202, body: body}}), do: { :ok, body }
-  defp handle_post({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_post({:ok, %{status_code: _, body: body}}), do: { :error, body }
   defp handle_post({:error, reason}), do: { :error, reason }
 
   defp handle_put({:ok, %{status_code: 201, body: body}}), do: { :ok, body }
-  defp handle_put({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_put({:ok, %{status_code: _, body: body}}), do: { :error, body }
   defp handle_put({:error, reason}), do: { :error, reason }
 
   defp handle_delete({:ok, %{status_code: 200, body: body}}), do: { :ok, body }
-  defp handle_delete({:ok, %{status_code: ___, body: body}}), do: { :error, body }
+  defp handle_delete({:ok, %{status_code: _, body: body}}), do: { :error, body }
   defp handle_delete({:error, reason}), do: { :error, reason }
 end
